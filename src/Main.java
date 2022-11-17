@@ -8,6 +8,7 @@ import java.util.*;
 //              + Doesn't enter number (display error message)
 //      - 1: Naming characters
 //              + Lowercase the whole name and match
+//      - 6: List Alphabetical Order
 
 
 public class Main {
@@ -151,6 +152,8 @@ public class Main {
 
                     // Records Item(Object) for Character
                     character.add_item(new_item);
+
+                    System.out.println(character.get_name() + " has acquired " + new_item.get_item_name());
 
 
                     // Uses Boolean if it found the Character
@@ -307,6 +310,7 @@ public class Main {
                                     found_item = true;
                                     System.out.println("   Error: The Buyer Could Not Afford This Item");
                                     System.out.println("          Please Try Again");
+                                    System.out.println(seller + " could not sell " + item.get_item_name() + " to " + buyer);
                                 }
 
                             }
@@ -318,6 +322,7 @@ public class Main {
                                 finding_seller.get_items().remove(finding_seller.get_item(temp_holder.get_item_name()));
                                 // adds credits to seller
                                 finding_seller.add_credits(temp_holder.get_item_value());
+                                System.out.println(seller + " has sold " + temp_holder.get_item_name() + " to " + buyer);
 
                             }
                         }
@@ -357,6 +362,67 @@ public class Main {
     }
 
     // nothing down here ------------------------------------------------------------
+    public static ArrayList<Character> dropping_item(String identifying_character_prompt, String dropping_item_prompt, Scanner scanner, ArrayList<Character> created_characters){
+        // Declaring Variables
+        Boolean found_character = false;
+        Boolean found_item = false;
+
+
+
+        if (created_characters.isEmpty()){
+            System.out.println("   Error: You haven't entered any Characters");
+            System.out.println("          Please Try Again");
+        }
+        else{
+
+            // Finding the character
+            System.out.print(identifying_character_prompt);
+            String character_name = scanner.nextLine();
+            character_name = scanner.nextLine();
+
+
+
+            for (Character character_in_array: created_characters){
+                if(character_name.equals(character_in_array.get_name())){
+                    found_character = true;
+
+                    if(!character_in_array.get_items().isEmpty()){
+
+                        System.out.println(dropping_item_prompt);
+                        String item = scanner.nextLine();
+
+                        while(character_in_array.dropItem(item)){
+                            System.out.println("something happened");
+                        }
+
+                    }
+
+                    else{
+                        System.out.println("   Error: " + );
+                    }
+
+
+                }
+            }
+
+            if (!found_character){
+                System.out.println("   Error: Could Not Find Character by that Name");
+                System.out.println("          Please Try Again");
+            }
+
+            else if (found_character && !found_item){
+                System.out.println("   Error: Could Not Find an Item by that Name");
+                System.out.println("          Please Try Again");
+            }
+
+        }
+
+
+
+        return created_characters;
+
+
+    }
 
 
     public static ArrayList<Character> computting_command(Integer command, Scanner scanner, ArrayList<Character> created_characters){
@@ -368,6 +434,13 @@ public class Main {
         if (command == 2){
             created_characters = set_characters_item("Which character is adding the item? ", "What is the name of the item?  ", "What is the item's value? ", scanner, created_characters);
         }
+
+        if (command == 3){
+            created_characters = dropping_item("Which Character is dropping an item? ","What's the name of the item that's going to be dropped? ", scanner, created_characters);
+        }
+
+
+
         if (command == 5){
             selling_item("Which character is selling the item? ", "Which character is buying the item? ", "What is the name of the item? ", scanner, created_characters);
         }

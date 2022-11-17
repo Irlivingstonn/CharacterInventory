@@ -70,9 +70,15 @@ public class Character {
 
 
     public boolean dropItem(String itemName){
-        System.out.println(itemName);
 
-        return true;
+        for (Item item_in_array: this.get_items()){
+            if (itemName.equals(item_in_array.get_item_name())){
+                this.get_items().remove(itemName);
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public boolean sellItemToVendor(String itemName){
