@@ -59,7 +59,6 @@ public class Character {
         }
 
         // needed a return statement below this so i got this first item of the arraylist
-        System.out.println("whyyyyyyy");
         return this.get_items().get(0);
     }
 
@@ -71,11 +70,11 @@ public class Character {
 
     public boolean dropItem(String itemName){
 
-        for (Item item_in_array: this.get_items()){
-            if (itemName.equals(item_in_array.get_item_name())){
-                this.get_items().remove(itemName);
+        //System.out.println("here's the items so far: " + this.get_item(itemName).get_item_name());
+
+        if (itemName.equals(this.get_item(itemName).get_item_name())){
+                this.get_items().remove(this.get_item(itemName));
                 return true;
-            }
         }
 
         return false;

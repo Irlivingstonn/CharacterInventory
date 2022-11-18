@@ -362,18 +362,30 @@ public class Main {
     }
 
     // nothing down here ------------------------------------------------------------
-    public static ArrayList<Character> dropping_item(String identifying_character_prompt, String dropping_item_prompt, Scanner scanner, ArrayList<Character> created_characters){
+    public static ArrayList<Character> dropping_item(String identifying_character_prompt, String dropping_item_prompt, Scanner scanner, ArrayList<Character> created_characters) {
         // Declaring Variables
         Boolean found_character = false;
         Boolean found_item = false;
 
+        Boolean first_condition = false;
+
+        Boolean did_item_drop = false;
+
+        String item = "";
 
 
-        if (created_characters.isEmpty()){
+        // Making a temperary holder for the item (only to get item name and value)
+        Item item_temp_holder = new Item("temp", 0);
+
+        // Making a temporary holder for the character (only to get their name)
+        Character character_temp_holder = new Character("temp", 0, null);
+
+
+
+        if (created_characters.isEmpty()) {
             System.out.println("   Error: You haven't entered any Characters");
             System.out.println("          Please Try Again");
-        }
-        else{
+        } else {
 
             // Finding the character
             System.out.print(identifying_character_prompt);
@@ -381,48 +393,79 @@ public class Main {
             character_name = scanner.nextLine();
 
 
-
-            for (Character character_in_array: created_characters){
-                if(character_name.equals(character_in_array.get_name())){
+            for (Character character_in_array : created_characters) {
+                if (character_name.equals(character_in_array.get_name())) {
                     found_character = true;
 
-                    if(!character_in_array.get_items().isEmpty()){
+                    // Puts the items value in a temporary holder
+                    character_temp_holder.set_name(character_in_array.get_name());
 
-                        System.out.println(dropping_item_prompt);
-                        String item = scanner.nextLine();
 
-                        while(character_in_array.dropItem(item)){
-                            System.out.println("something happened");
+                    // check to see if the character has items
+                    if (!character_in_array.get_items().isEmpty()) {
+
+                        // asks the user what item to drop
+                        System.out.print(dropping_item_prompt);
+                        item = scanner.nextLine();
+
+                        // checks every item
+                        for (Item item_in_array : character_in_array.get_items()) {
+
+                            // finds the item
+                            if (item.equals(item_in_array.get_item_name())){
+                                found_item = true;
+
+                                // Puts the items value in a temporary holder
+                                item_temp_holder.set_item_name(item_in_array.get_item_name());
+                                item_temp_holder.set_item_value(item_in_array.get_item_value());
+
+
+                            }
+
+                        }
+                        // put an if statement here since the drop item gets rid of the item in the character's inventory
+                        // which messes with the for loop
+
+                        // so i put the item in a temporary holder to use after the for loop
+                        if (found_item){
+
+                            // if the character can drop the item
+                            did_item_drop = character_in_array.dropItem(item_temp_holder.get_item_name());
+
+                            // checks to see if the character could drop the item
+                            if (did_item_drop) {
+                                System.out.println(character_in_array.get_name() + " has dropped " + item_temp_holder.get_item_name());
+                            }
+
                         }
 
+
                     }
 
-                    else{
-                        System.out.println("   Error: " + );
+                    else {
+                        first_condition = true;
+                        System.out.print("   Error: " + character_in_array.get_name() + " does not have any items");
                     }
-
-
                 }
             }
 
-            if (!found_character){
+
+            if (!found_character && !first_condition) {
                 System.out.println("   Error: Could Not Find Character by that Name");
                 System.out.println("          Please Try Again");
+
             }
 
-            else if (found_character && !found_item){
+            else if (found_character && !found_item && !first_condition && !did_item_drop) {
                 System.out.println("   Error: Could Not Find an Item by that Name");
                 System.out.println("          Please Try Again");
+
+                System.out.println(character_temp_holder.get_name() + " could not drop " + item);
             }
-
         }
-
-
-
         return created_characters;
-
-
     }
+
 
 
     public static ArrayList<Character> computting_command(Integer command, Scanner scanner, ArrayList<Character> created_characters){
