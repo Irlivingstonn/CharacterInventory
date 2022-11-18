@@ -367,7 +367,7 @@ public class Main {
         Boolean found_character = false;
         Boolean found_item = false;
 
-        Boolean first_condition = false;
+        Boolean no_items = false;
 
         Boolean did_item_drop = false;
 
@@ -443,20 +443,20 @@ public class Main {
                     }
 
                     else {
-                        first_condition = true;
+                        no_items = true;
                         System.out.print("   Error: " + character_in_array.get_name() + " does not have any items");
                     }
                 }
             }
 
 
-            if (!found_character && !first_condition) {
+            if (!found_character && !no_items) {
                 System.out.println("   Error: Could Not Find Character by that Name");
                 System.out.println("          Please Try Again");
 
             }
 
-            else if (found_character && !found_item && !first_condition && !did_item_drop) {
+            else if (found_character && !found_item && !no_items && !did_item_drop) {
                 System.out.println("   Error: Could Not Find an Item by that Name");
                 System.out.println("          Please Try Again");
 
@@ -471,7 +471,7 @@ public class Main {
         Boolean found_character = false;
         Boolean found_item = false;
 
-        Boolean first_condition = false;
+        Boolean no_items = false;
         String new_item_name = "";
 
         Boolean could_sell = false;
@@ -528,7 +528,7 @@ public class Main {
                         }
                     }
                     else{
-                        first_condition = true;
+                        no_items = true;
                         System.out.println("   Error: " + new_character_name + " does not have any items");
                         System.out.println("          Give the Character an Item and Try Again");
                     }
@@ -539,11 +539,11 @@ public class Main {
             }
 
 
-            if (!found_character && !first_condition){
+            if (!found_character && !no_items){
                 System.out.println("   Error: Could Not Find Character by that Name");
                 System.out.println("          Please Try Again");
             }
-            else if (found_character && !found_item && !first_condition && !could_sell) {
+            else if (found_character && !found_item && !no_items && !could_sell) {
                 System.out.println("   Error: Could Not Find an Item by that Name");
                 System.out.println("          Please Try Again");
 
@@ -552,6 +552,41 @@ public class Main {
 
         }
         return created_characters;
+    }
+
+    public static void list_characters_items(String prompt, Scanner scanner, ArrayList<Character> created_characters){
+        Boolean found_character = false;
+
+        if (created_characters.isEmpty()) {
+            System.out.println("   Error: You haven't entered any Characters");
+            System.out.println("          Please Try Again");
+        }
+        else {
+            System.out.print(prompt);
+            String new_character_name = scanner.nextLine();
+            new_character_name = scanner.nextLine();
+
+            for (Character character_in_array: created_characters){
+                if(new_character_name.equals(character_in_array.get_name())){
+                    found_character = true;
+
+                    if (!(character_in_array.get_items().isEmpty())){
+
+                    }
+                    else{
+                        System.out.println("   Error: " + new_character_name + " does not have any items");
+                        System.out.println("          Give the Character an Item and Try Again");
+                    }
+                }
+            }
+
+            if (!found_character){
+                System.out.println("   Error: Could Not Find Character by that Name");
+                System.out.println("          Please Try Again");
+            }
+
+
+        }
     }
 
 
@@ -582,7 +617,12 @@ public class Main {
             list_characters(created_characters);
         }
 
-        return created_characters;
+        if (command == 7){
+            list_characters_items("Which Character's Inventory would you like to see? ", scanner, created_characters);
+        }
+
+
+            return created_characters;
     }
 
     public static Integer get_user_number(String prompt, Scanner scanner){
