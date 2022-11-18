@@ -466,6 +466,94 @@ public class Main {
         return created_characters;
     }
 
+    public static ArrayList<Character> selling_to_vendor(String identifying_character_prompt, String dropping_item_prompt, Scanner scanner, ArrayList<Character> created_characters){
+        // Declaring Variables
+        Boolean found_character = false;
+        Boolean found_item = false;
+
+        Boolean first_condition = false;
+        String new_item_name = "";
+
+        Boolean could_sell = false;
+
+
+        // Making a temperary holder for the item (only to get item name and value)
+        Item item_temp_holder = new Item("temp", 0);
+
+        // Making a temporary holder for the character (only to get their name)
+        Character character_temp_holder = new Character("temp", 0, null);
+
+
+        if (created_characters.isEmpty()) {
+            System.out.println("   Error: You haven't entered any Characters");
+            System.out.println("          Please Try Again");
+        } else {
+            System.out.print(identifying_character_prompt);
+            String new_character_name = scanner.nextLine();
+            new_character_name = scanner.nextLine();
+
+            for (Character character_in_array: created_characters){
+                if (new_character_name.equals(character_in_array.get_name())){
+                    found_character = true;
+
+                    // Puts the items value in a temporary holder
+                    character_temp_holder.set_name(character_in_array.get_name());
+
+
+                    if(!(character_in_array.get_items().isEmpty())){
+
+                        System.out.print(dropping_item_prompt);
+                        new_item_name = scanner.nextLine();
+
+                        for(Item item_in_array: character_in_array.get_items()){
+                            if(new_item_name.equals(item_in_array.get_item_name())){
+                                found_item = true;
+
+                                item_temp_holder.set_item_name(item_in_array.get_item_name());
+                                item_temp_holder.set_item_value(item_in_array.get_item_value());
+                            }
+                        }
+
+                        if(found_item){
+                            // updates the character's credits
+                            character_in_array.add_credits(item_temp_holder.get_item_value());
+
+                            // removes the item
+                            could_sell = character_in_array.dropItem(item_temp_holder.get_item_name());
+
+                            if(could_sell){
+                                System.out.println(character_in_array.get_name() + " has sold " + item_temp_holder.get_item_name() + " to a vendor");
+                            }
+
+                        }
+                    }
+                    else{
+                        first_condition = true;
+                        System.out.println("   Error: " + new_character_name + " does not have any items");
+                        System.out.println("          Give the Character an Item and Try Again");
+                    }
+
+
+
+                }
+            }
+
+
+            if (!found_character && !first_condition){
+                System.out.println("   Error: Could Not Find Character by that Name");
+                System.out.println("          Please Try Again");
+            }
+            else if (found_character && !found_item && !first_condition && !could_sell) {
+                System.out.println("   Error: Could Not Find an Item by that Name");
+                System.out.println("          Please Try Again");
+
+                System.out.println(character_temp_holder.get_name() + " could not sell " + new_item_name + " to a vendor");
+            }
+
+        }
+        return created_characters;
+    }
+
 
 
     public static ArrayList<Character> computting_command(Integer command, Scanner scanner, ArrayList<Character> created_characters){
@@ -482,7 +570,9 @@ public class Main {
             created_characters = dropping_item("Which Character is dropping an item? ","What's the name of the item that's going to be dropped? ", scanner, created_characters);
         }
 
-
+        if (command == 4){
+            created_characters = selling_to_vendor("Which Character is Selling to Vendor? ", "What is the Name of the Item? ", scanner, created_characters);
+        }
 
         if (command == 5){
             selling_item("Which character is selling the item? ", "Which character is buying the item? ", "What is the name of the item? ", scanner, created_characters);
