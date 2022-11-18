@@ -62,6 +62,16 @@ public class Character {
         return this.get_items().get(0);
     }
 
+    public String get_item_name_from_value(Integer item_value) {
+
+        for (Item item: this.get_items()){
+            if (item.get_item_value() == item_value){
+                return item.get_item_name();
+            }
+        }
+        return "null";
+    }
+
 
     public void add_item(Item item){
         this.items.add(item);

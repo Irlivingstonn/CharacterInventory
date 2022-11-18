@@ -555,6 +555,7 @@ public class Main {
     }
 
     public static void list_characters_items(String prompt, Scanner scanner, ArrayList<Character> created_characters){
+
         Boolean found_character = false;
 
         if (created_characters.isEmpty()) {
@@ -572,7 +573,29 @@ public class Main {
 
                     if (!(character_in_array.get_items().isEmpty())){
 
-                    }
+                        Integer[] array_for_sorting_by_value = {};
+                        ArrayList<Integer> arraylist_for_sorting_by_value = new ArrayList<>(Arrays.asList(array_for_sorting_by_value));
+
+                        for(Item item_in_array: character_in_array.get_items()){
+                            arraylist_for_sorting_by_value.add(item_in_array.get_item_value());
+
+                            //System.out.println(item_in_array.get_item_name() + " (" + item_in_array.get_item_value() + ")");
+                        }
+
+                        array_for_sorting_by_value = arraylist_for_sorting_by_value.toArray(array_for_sorting_by_value);
+
+                        // sorts array from smallest to largest
+                        Arrays.sort(array_for_sorting_by_value);
+
+
+                        arraylist_for_sorting_by_value = new ArrayList<>(Arrays.asList(array_for_sorting_by_value));
+
+
+                        for (int element = arraylist_for_sorting_by_value.size() - 1; element >= 0; element--) {
+                            System.out.println(character_in_array.get_item_name_from_value(arraylist_for_sorting_by_value.get(element)) + " (" + arraylist_for_sorting_by_value.get(element) + ")");
+                        }
+
+                        }
                     else{
                         System.out.println("   Error: " + new_character_name + " does not have any items");
                         System.out.println("          Give the Character an Item and Try Again");
@@ -621,8 +644,7 @@ public class Main {
             list_characters_items("Which Character's Inventory would you like to see? ", scanner, created_characters);
         }
 
-
-            return created_characters;
+        return created_characters;
     }
 
     public static Integer get_user_number(String prompt, Scanner scanner){
