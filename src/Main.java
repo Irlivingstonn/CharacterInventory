@@ -612,6 +612,46 @@ public class Main {
         }
     }
 
+    public static void list_all_information(ArrayList<Character> created_characters){
+        if (created_characters.isEmpty()) {
+            System.out.println("   Error: You haven't entered any Characters");
+            System.out.println("          Please Try Again");
+        }
+
+        else {
+            for (Character character_in_array: created_characters){
+                System.out.println(character_in_array.get_name() + " (" + character_in_array.get_credits() + ")");
+
+                // checks if the character has items
+                if (!(character_in_array.get_items().isEmpty())) {
+
+                    Integer[] array_for_sorting_by_value = {};
+                    ArrayList<Integer> arraylist_for_sorting_by_value = new ArrayList<>(Arrays.asList(array_for_sorting_by_value));
+
+                    for(Item item_in_array: character_in_array.get_items()){
+                        arraylist_for_sorting_by_value.add(item_in_array.get_item_value());
+
+                        //System.out.println(item_in_array.get_item_name() + " (" + item_in_array.get_item_value() + ")");
+                    }
+
+                    array_for_sorting_by_value = arraylist_for_sorting_by_value.toArray(array_for_sorting_by_value);
+
+                    // sorts array from smallest to largest
+                    Arrays.sort(array_for_sorting_by_value);
+
+
+                    arraylist_for_sorting_by_value = new ArrayList<>(Arrays.asList(array_for_sorting_by_value));
+
+
+                    for (int element = arraylist_for_sorting_by_value.size() - 1; element >= 0; element--) {
+                        System.out.println("   " + character_in_array.get_item_name_from_value(arraylist_for_sorting_by_value.get(element)) + " (" + arraylist_for_sorting_by_value.get(element) + ")");
+                    }
+                }
+            }
+
+        }
+    }
+
 
 
     public static ArrayList<Character> computting_command(Integer command, Scanner scanner, ArrayList<Character> created_characters){
@@ -642,6 +682,10 @@ public class Main {
 
         if (command == 7){
             list_characters_items("Which Character's Inventory would you like to see? ", scanner, created_characters);
+        }
+
+        if (command == 8){
+            list_all_information(created_characters);
         }
 
         return created_characters;
